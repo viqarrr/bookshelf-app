@@ -11,6 +11,7 @@ const port = process.env.PORT;
 
 app.get('/', (req, res) => res.send("Hello World!"));
 app.use('/api/books', bookRoutes)
+app.use(express.urlencoded({extended:true}))
 
 app.use(NotFound);
 app.use(ErrorHandler);

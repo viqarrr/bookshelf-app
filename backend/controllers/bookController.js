@@ -1,4 +1,5 @@
 import asyncHandler from 'express-async-handler'
+import Book from '../models/bookModels.js'
 
 // @desc  Get All Books
 // METHOD GET /api/books
@@ -11,7 +12,22 @@ const GetBooks = asyncHandler(async(req, res) => {
 // METHOD POST /api/books
 // @access Public
 const CreateNewBook = asyncHandler(async(req, res) => {
-  res.send("Create New Books")
+  console.log(req.body)
+
+  res.send("sjfos")
+  
+  // const { title, author, publishYear, category, description, url } = req.body;
+  // const newBook = new Book({
+  //   title,
+  //   author,
+  //   publishYear,
+  //   description,
+  //   category, 
+  //   url
+  // })
+  // const bookJson = await newBook.save();
+  // if(bookJson) res.json(newBook);
+  // else throw new Error('Server Error');
 })
 
 // @desc  Get Book Detail
