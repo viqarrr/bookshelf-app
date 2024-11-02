@@ -1,34 +1,23 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Routes, Route } from "react-router-dom";
+import Books from './screens/Books';
+import BookDetail from './screens/BookDetail';
+import Header from './components/Header';
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [light, setLight] = useState(true)
+  const toggleLight = () => {
+    setLight(!light)
+  }
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className={`${light ? '' : 'dark bg-slate-90'}`} >
+      <Header light={light} toggleLight={toggleLight}/>
+      <Routes>
+        <Route path='/books' element={<Books />}/>
+        <Route path='/books/:id' element={<BookDetail />}/>
+      </Routes>
+    </div>
   )
 }
 
