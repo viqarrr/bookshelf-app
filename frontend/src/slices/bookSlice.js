@@ -8,16 +8,17 @@ const bookSlice = createSlice({
   },
   reducers: {
     setBooks(state, action) {
-      state.books = [...state.books, ...action.payload]
+      state.books.push(...action.payload);
     },
-    setClearBooks(state, action) {
+    clearBooks(state) {
       state.books = [];
+      state.page = 1;
     },
-    setPage(state, action) {
+    setPage(state) {
       state.page++;
     },
   },
 });
 
-export const { setBooks, setClearBooks, setPage } = bookSlice.actions;
+export const { setBooks, clearBooks, setPage } = bookSlice.actions;
 export const bookReducer = bookSlice.reducer;

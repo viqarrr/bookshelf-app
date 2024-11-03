@@ -11,7 +11,7 @@ const CreateEditModal = ({ edit, prevData }) => {
     title: '',
     author: '',
     publishYear: '',
-    description: '',
+    description: 'Education',
     category: '',
     url: '',
   };

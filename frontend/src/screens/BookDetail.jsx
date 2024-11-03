@@ -4,6 +4,7 @@ import CreateEditModal from "../modals/CreateEditModal";
 import { editOpen } from "../slices/modalSlice";
 import { useDeleteBookMutation, useGetBookDetailQuery } from "../slices/bookApiSlice";
 import { useNavigate, useParams } from "react-router";
+import {toast} from "react-toastify"
 
 const BookDetail = () => {
   const {id} = useParams()
@@ -14,14 +15,27 @@ const BookDetail = () => {
   const edit = useSelector(state => state.modal.edit)
   const dispatch = useDispatch()
 
-  const handleDelete = async() => {
-    try {
-      await deleteBook(id).unwrap()
-      navigate('/')
-    } catch (error) {
-      console.log(error)
-    }    
+  const handleDelete = async () => {
+  try {
+    const result = await deleteBook(id);
+    navigate('/');
+    toast.success('Book deleted successfully');
+  } catch (error) {
+    // Check if the error is an RTK Query error
+    if (error.status) {
+      // Handle specific status codes
+      toast.error(`Delete failed: ${error.status} ${error.data?.message || ''}`);
+    } else {
+      // Handle other errors (network issues, etc.)
+      toast.error('Delete Book Failed: Network or unexpected error');
+    }
+    console.error('Delete failed:', error);
   }
+};
+
+
+const handleClick = () => navigate('/')
+
   return (
     <section className="h-full text-gray-700 body-font overflow-hidden">
       <div className="container px-5 py-24 mx-auto">
@@ -57,7 +71,7 @@ const BookDetail = () => {
                   Delete
                 </button>
               </div>
-              <button className="rounded-full w-10 h-10 bg-gray-200 dark:bg-gray-500 p-0 border-0 inline-flex items-center justify-center text-gray-500 dark:text-gray-200 ml-4">
+              <button onClick={handleClick} className="rounded-full w-10 h-10 bg-gray-200 dark:bg-gray-500 p-0 border-0 inline-flex items-center justify-center text-gray-500 dark:text-gray-200 ml-4">
                 <svg
                   fill="currentColor"
                   strokeLinecap="round"
