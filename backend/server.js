@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { NotFound, ErrorHandler } from './middleware/errorMiddleware.js';
 import bookRoutes from './routes/bookRoutes.js'
-import connectDB from '../app/db.js'
+import connectDB from './app/db.js'
 
 dotenv.config();
 connectDB()
