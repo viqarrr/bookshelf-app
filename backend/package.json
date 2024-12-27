@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "backend": "node server.js",
+    "start": "node server.js",
     "server": "nodemon server.js",
     "app": "concurrently \"npm run server\" \"npm run dev --prefix ../frontend \""
   },
