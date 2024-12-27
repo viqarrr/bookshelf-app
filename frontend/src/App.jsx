@@ -7,14 +7,10 @@ import Header from './components/Header';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 function App() {
-  const [light, setLight] = useState(true)
-  const toggleLight = () => {
-    setLight(!light)
-  }
   return (
-    <div className={`${light ? '' : 'dark'} dark: bg-slate-90`} >
+    <div className={`dark: bg-slate-90`} >
     <ToastContainer position='top-center' autoClose={1000}/>
-      <Header light={light} toggleLight={toggleLight}/>
+      <Header/>
       <Routes>
         <Route path='/' element={<Books />}/>
         <Route path='/:category' element={<Books />}/>
