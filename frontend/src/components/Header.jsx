@@ -1,44 +1,117 @@
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CreateEditModal from "../modals/CreateEditModal";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addOpen } from "../slices/modalSlice";
+import CreateEditModal from "../modals/CreateEditModal";
 
-const Header = ({ light, toggleLight }) => {
-  const add = useSelector(state => state.modal.add)
-  const dispatch = useDispatch()
+const Header = () => {
+  const add = useSelector((state) => state.modal.add);
+  const dispatch = useDispatch();
+
+  const [isOpen, setIsOpen] = useState(false)
+  const navbarRef = useRef(null);
+  const toggleNavbar = () => setIsOpen(!isOpen);
+  const handleClickOutside= (event) => {
+    if(navbarRef.current && !navbarRef.current.contains(event.target)){
+      setIsOpen(false)
+      console.log(isOpen)
+    }
+  }
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   return (
-    <div className="flex items-center justify-center py-4 flex-wrap dark:bg-gray-900">
-      <Link to={'/'} className="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">
-        All Categories
-      </Link>
-      <Link to={'/Education'} className="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">
-        Education
-      </Link>
-      <Link to={'/Sport'} className="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">
-        Sport
-      </Link>
-      <Link to={'/Techology'} className="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">
-        Technology
-      </Link>
-      <Link to={'/Science'} className="tetext-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">
-        Science
-      </Link>
-      <button onClick={() => dispatch(addOpen())} className="text-white border border-blue-600 bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-white dark:bg-blue-500 dark:focus:ring-blue-800">
-        Add New Book
-      </button>
-      <label className="inline-flex items-center cursor-pointer">
-        <input
-          type="checkbox"
-          value=""
-          className="sr-only peer"
-          onChange={toggleLight}
-        />
-        <div className="relative w-11 h-6 bg-yellow-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-slate-300 dark:peer-focus:ring-slate-800 dark:bg-yellow-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-yellow-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-yellow-600 peer-checked:bg-slate-600"></div>
-        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-          {light ? "Light" : "Dark"}
-        </span>
-      </label>
+    <div className={`bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 ${isOpen ? '' : 'border-b border-gray-200 dark:border-gray-600'}`} >
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <Link
+          to={'/'}
+          className="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <span className="self-center text-xl sm:text-2xl font-semibold whitespace-nowrap dark:text-white">
+            ScrollShelf
+          </span>
+        </Link>
+        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+          <button
+            onClick={() => dispatch(addOpen())}
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Add New Book
+          </button>
+          <button
+            onClick={toggleNavbar}
+            type="button"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-expanded={isOpen}
+          >
+            <span className="sr-only">Open main menu</span>
+            <svg
+              className="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          className={`${isOpen ? 'block' : 'hidden'} items-center justify-between w-full md:flex md:w-auto md:order-1`}
+          id="navbar-sticky"
+        >
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            <li>
+              <Link
+                to={'/education'}
+                href="#"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                Education
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={'/sport'}
+                href="#"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                Sport
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={'/technology'}
+                href="#"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                Technology
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="#"
+                to={'/science'}
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+              >
+                Science
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
       {add && createPortal(<CreateEditModal />, document.body)}
     </div>
   );

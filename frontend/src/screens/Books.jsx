@@ -1,10 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { useParams } from "react-router"
 import { useLazyGetBooksQuery } from "../slices/bookApiSlice"
 import { setBooks, clearBooks, setPage } from "../slices/bookSlice"
-import {toast} from "react-toastify"
 
 const Books = () => {
   const {category} = useParams()
@@ -20,7 +20,6 @@ const Books = () => {
 
   useEffect(() => {
   dispatch(clearBooks());
-  toast.success('Cleared books');
   }, [category])
   useEffect(() => {
     loadItems()
