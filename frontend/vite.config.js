@@ -6,11 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server:{
     port: 3000,
-    proxy:{
-      '/api':{
+    proxy: {
+      '/api': {
         target: 'https://deafening-clerissa-viqarr-a8530182.koyeb.app',
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,   
+        secure: false,        
+      },
+    },
   }
 })
