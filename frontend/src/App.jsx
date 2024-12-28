@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 function App() {
+  console.log(import.meta.env.VITE_BASE_URL)
   return (
     <div className={`dark: bg-slate-90`} >
     <ToastContainer position='top-center' autoClose={1000}/>
