@@ -1,48 +1,84 @@
-import { useDispatch } from "react-redux";
-import { addClose, editClose } from "../slices/modalSlice";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addClose, editClose } from "../slices/modalSlice";
 import {
   useCreateBookMutation,
   useEditBookMutation,
+  useLazyGetBooksQuery
 } from "../slices/bookApiSlice";
+import { clearBooks, setBooks } from "../slices/bookSlice";
 
 const CreateEditModal = ({ edit, prevData }) => {
+  const {categoryParams} = useParams()
+  const dispatch = useDispatch()
+  const { books, page } = useSelector(state  => {
+    return {
+      books: state.books.books,
+      page: state.books.page
+    }
+  })
+
+  const loadItems = async() => {
+    try {
+      const res = await getBooks({limit: 10, page: page, category: categoryParams})
+      dispatch(setBooks(res?.data?.data))
+      console.log(books)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
   const initialState = {
-    title: '',
-    author: '',
-    publishYear: '',
-    description: 'Education',
-    category: '',
-    url: '',
+    title: "",
+    author: "",
+    publishYear: "",
+    description: "",
+    category: "Education",
+    url: "",
   };
   const [data, setData] = useState(initialState);
   useEffect(() => {
-    if(edit) setData(prevData);
+    if (edit) setData(prevData);
   }, []);
   const { title, author, publishYear, description, category, url } = data;
-  const dispatch = useDispatch();
   const [createBook] = useCreateBookMutation();
   const [editBook] = useEditBookMutation();
+  const [getBooks] = useLazyGetBooksQuery();
 
-  
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
+    try {
       if (edit) {
         const book = await editBook(data).unwrap();
+        toast.success("Book edited");
         dispatch(editClose());
       } else {
         const book = await createBook(data).unwrap();
+        dispatch(clearBooks());
+        loadItems();
+        toast.success("Book created");
         dispatch(addClose());
       }
-    } catch (error){ 
-      console.log(error)
+    } catch (error) {
+      // Check if the error is an RTK Query error
+      if (error.status) {
+        // Handle specific status codes
+        toast.error(
+          `Attempt failed: ${error.status} ${error.data?.message || ""}`
+        );
+      } else {
+        // Handle other errors (network issues, etc.)
+        toast.error("Attempt Failed: Network or unexpected error");
+      }
+      console.error("Attempt failed:", error);
     }
-    console.log(data)
-    setData(initialState)
+    console.log(data);
+    setData(initialState);
   };
 
   return (
@@ -160,7 +196,9 @@ const CreateEditModal = ({ edit, prevData }) => {
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
-                  <option value="Education" selected=''>Education</option>
+                  <option value="Education">
+                    Education
+                  </option>
                   <option value="Sport">Sport</option>
                   <option value="Technology">Technology</option>
                   <option value="Science">Science</option>
@@ -219,7 +257,7 @@ const CreateEditModal = ({ edit, prevData }) => {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              {edit ? 'Save' :'Add new book'} 
+              {edit ? "Save" : "Add new book"}
             </button>
           </form>
         </div>

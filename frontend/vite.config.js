@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     proxy:{
       '/api':{
-        target: 'http://localhost:8000',
+        target: 'https://deafening-clerissa-viqarr-a8530182.koyeb.app',
         changeOrigin: true
       }
     }

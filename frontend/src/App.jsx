@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import './App.css'
 import { Routes, Route } from "react-router-dom";
 import Books from './screens/Books';
 import BookDetail from './screens/BookDetail';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 function App() {
@@ -16,6 +16,7 @@ function App() {
         <Route path='/:category' element={<Books />}/>
         <Route path='/book/:id' element={<BookDetail />}/>
       </Routes>
+      <Footer />
     </div>
   )
 }
