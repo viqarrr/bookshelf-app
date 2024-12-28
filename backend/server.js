@@ -13,10 +13,10 @@ const port = process.env.PORT;
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors({
-  origin: 'https://scrollshelf.netlify.app',  // Ganti dengan domain frontend Anda
+  origin: 'https://scrollshelf.netlify.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,  // Jika Anda perlu mengizinkan kredensial seperti cookies atau token
+  credentials: true, 
 }));
 
 app.get('/', (req, res) => res.send("Hello World!"));
